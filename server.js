@@ -651,9 +651,10 @@ discordClient.on('channelUpdate', function(oldChannel, newChannel) {
 
 });
 
+let msgHandler;
 
 // Processing received messages 
-discordClient.on('message', function(msg) {
+discordClient.on('message', msgHandler = function(msg) {
     if (ircClients.length > 0 && msg.channel.type === 'text') {
 
 
@@ -941,6 +942,12 @@ discordClient.on('message', function(msg) {
         }
 
     }
+});
+
+
+discordClient.on("messageUpdate", function(_, newMsg) {
+    newMsg.content = "[Edit] " + newMsg.content;
+    msgHandler(newMsg);
 });
 
 // Join command given, let's join the channel. 
